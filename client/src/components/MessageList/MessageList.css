@@ -6,3 +6,7 @@
     min-width: 0;
     justify-content: flex-end;
 }
+
+.emptyContainer {
+    justify-content: center;
+}

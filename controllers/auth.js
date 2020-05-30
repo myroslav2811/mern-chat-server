@@ -74,7 +74,6 @@ const auth = (req, res) => {
             }
         })
         .catch((err) => {
-            ('2', err)
             return res.status(500).json({ message: err });
         })
 };

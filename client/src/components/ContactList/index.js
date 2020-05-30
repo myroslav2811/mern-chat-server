@@ -70,20 +70,20 @@ export const ContactList = () => {
                         autoHideTimeout={1000}
                         autoHideDuration={200}
                         renderTrackHorizontal={props => <div {...props} style={{ display: 'none' }} />}>
-                        {filtered.length
-                            ? <div>
-                                <p className="listHeader">
-                                    Dialogs
+                        <div>
+                            <p className="listHeader">
+                                Dialogs
                                 </p>
-                                {filtered.map(item => <Contact updatedAt={item.updatedAt}
+                            {filtered.length
+                                ? filtered.map(item => <Contact updatedAt={item.updatedAt}
                                     username={item.to.username}
                                     id={item._id}
                                     lastMessage={item.lastMessage}
                                     key={item._id}
                                     item={item}
-                                    avatar={item.to.avatar} />)}
-                            </div>
-                            : <EmptyComponent text='There are no contacts' />}
+                                    avatar={item.to.avatar} />)
+                                : <EmptyComponent text='There are no contacts. Find user using the field above and start messaging' />}
+                        </div>
                         {results
                             ? <div>
                                 <p className="listHeader">
@@ -93,12 +93,11 @@ export const ContactList = () => {
                                     ? <Loading />
                                     : results.length
                                         ? results.map(item => <Contact username={item.username} userId={item._id} avatar={item.avatar} isSearching={true} key={item._id} />)
-                                        : <EmptyComponent text='There are no similar contacts' />
+                                        : <EmptyComponent text='There are no contacts' />
                                 }
                             </div>
                             : null}
                     </Scrollbars>}
-
             </div>
         </div >
     )

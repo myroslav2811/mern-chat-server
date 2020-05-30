@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
+import classNames from 'classnames';
 
 import { MessagesContext } from '../../Context/Messages';
 import { DialogContext } from '../../Context/Dialogs'
@@ -34,6 +35,8 @@ export const MessageList = () => {
         }
     }
 
+    const messageListClasses = classNames('messagesContainer', { 'emptyContainer': !messages.length });
+
     return (
         isLoading
             ? <div style={{ flexGrow: '1' }}>
@@ -48,7 +51,7 @@ export const MessageList = () => {
                 onUpdate={handleUpdate}
                 renderTrackHorizontal={props => <div {...props} style={{ display: 'none' }}
                 />}>
-                <div className='messagesContainer'>
+                <div className={messageListClasses}>
                     {messages.length
                         ? messages.map(item => <Message key={item._id}
                             text={item.text}
