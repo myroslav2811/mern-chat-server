@@ -6,7 +6,6 @@ module.exports = (req, res) => {
         .populate([{ path: 'members', select: '-password' }, { path: 'lastMessage' }])
         .exec()
         .then(item => {
-            (item);
             if (!item) {
                 Dialog.create({
                     lastMessage: null,
@@ -26,7 +25,7 @@ module.exports = (req, res) => {
                     })
             }
             else {
-                res.json(item);
+                res.json(dialogsMod(item, req.payload.userId));
             }
         })
 }

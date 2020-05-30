@@ -11,9 +11,9 @@ const dialogsMod = require('./helpers/dialogsMod');
 
 const { auth, refreshTokens, signUp, logOut, getDialogs, searchContacts, checkToken, getMessages, createDialog } = require('./controllers')
 const { checkAuth } = require('./middleware');
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/diplomaChat', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
-// mongoose.set('debug', true)
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diplomaChat', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -45,6 +45,14 @@ io.use(jwtAuth.authenticate({
             return done(err);
         })
 }));
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static( 'client/build' ));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 const users = {};
 
@@ -84,9 +92,9 @@ io.on('connection', function (socket) {
     })
 });
 
-server.listen(3000, (err) => {
+server.listen(PORT, (err) => {
     if (err) {
         throw err;
     }
-    console.log('listening on port 3000');
+    console.log(`listening on port ${PORT}`);
 });

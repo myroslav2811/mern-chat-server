@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon index.js"
+    "devStart": "nodemon index.js",
+    "start": "node index.js",
+    "heroku-postbuild":"cd client && npm install && npm run-script build"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.13",
     "nodemon": "^2.0.3",
+    "path": "^0.12.7",
     "socket.io": "^2.3.0",
     "socketio-jwt-auth": "^0.1.0",
     "uuid": "^8.0.0"
