@@ -18,10 +18,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diplomaCh
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('client/build'));
 
 app.get('/dialogs', checkAuth, getDialogs);
 app.get('/check-auth', checkAuth, checkToken);
 app.get('/messages/:id', checkAuth, getMessages)
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.post('/signup', signUp);
 app.post('/signin', auth);
@@ -29,6 +33,7 @@ app.post('/refresh-tokens', refreshTokens);
 app.post('/logout', checkAuth, logOut);
 app.post('/search-contacts', checkAuth, searchContacts);
 app.post('/create-dialog', checkAuth, createDialog);
+
 
 io.use(jwtAuth.authenticate({
     secret: jwtOpt.secretKey
@@ -47,13 +52,6 @@ io.use(jwtAuth.authenticate({
         })
 }));
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static( 'client/build' ));
-
-    app.get('/*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-    });
-}
 
 const users = {};
 
