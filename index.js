@@ -14,7 +14,7 @@ const { auth, refreshTokens, signUp, logOut, getDialogs, searchContacts, checkTo
 const { checkAuth } = require('./middleware');
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diplomaChat', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diplomaChat', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
 
 app.use(cors());
 app.use(bodyParser.json());

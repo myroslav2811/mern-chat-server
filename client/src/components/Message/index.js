@@ -11,7 +11,7 @@ export const Message = ({ text, createdAt, author }) => {
     const { user } = useContext(AuthContext);
 
     const classes = classNames('message', {
-        'myMessage': user._id === author,
+        'myMessage': user && user._id === author,
     })
 
     return (
