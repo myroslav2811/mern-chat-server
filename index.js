@@ -4,36 +4,30 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const path = require('path');
 const cors = require('cors');
 const jwtAuth = require('socketio-jwt-auth');
 const { jwtOpt } = require('./options')
 const { User, Message, Dialog } = require('./models');
 const dialogsMod = require('./helpers/dialogsMod');
 
-const { auth, refreshTokens, signUp, logOut, getDialogs, searchContacts, checkToken, getMessages, createDialog } = require('./controllers')
-const { checkAuth } = require('./middleware');
-const PORT = process.env.PORT || 3000;
+const routerWithCheckingAuth = require('./routerWithCheckingAuth');
+const routerWithoutCheckingAuth = require('./routerWithoutCheckingAuth');
 
+const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diplomaChat', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('client/build'));
+app.use('/api', routerWithoutCheckingAuth);
+app.use('/api', routerWithCheckingAuth);
 
-app.get('/dialogs', checkAuth, getDialogs);
-app.get('/check-auth', checkAuth, checkToken);
-app.get('/messages/:id', checkAuth, getMessages)
-app.get('/*', (req, res) => {
+
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
-
-app.post('/signup', signUp);
-app.post('/signin', auth);
-app.post('/refresh-tokens', refreshTokens);
-app.post('/logout', checkAuth, logOut);
-app.post('/search-contacts', checkAuth, searchContacts);
-app.post('/create-dialog', checkAuth, createDialog);
-
 
 io.use(jwtAuth.authenticate({
     secret: jwtOpt.secretKey

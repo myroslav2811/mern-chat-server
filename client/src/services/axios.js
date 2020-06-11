@@ -5,7 +5,7 @@ import { updateAccessToken } from './socket';
 
 const urlArray = ['/signin']
 
-// axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = '/api';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorageService.getAccessToken();
 
 axios.interceptors.response.use((response) => {
